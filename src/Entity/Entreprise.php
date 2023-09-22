@@ -32,6 +32,7 @@ class Entreprise
     private ?string $ville = null;
 
     #[ORM\OneToMany(mappedBy: 'entreprise', targetEntity: Employe::class, orphanRemoval: true)]
+    #[ORM\OrderBy(["nom" => "ASC"])] // trier le nom de famille dans l'ordre alphabétique
     private Collection $employes;
 
     public function __construct()
@@ -60,6 +61,8 @@ class Entreprise
     {
         return $this->dateCreation;
     }
+
+
 
     public function setDateCreation(\DateTimeInterface $dateCreation): static
     {
@@ -104,6 +107,11 @@ class Entreprise
         return $this;
     }
 
+    public function getAdresseComplete(): ?string 
+    {
+        return $this->adresse." ".$this->cp." ".$this->ville;
+    }
+
     /**
      * @return Collection<int, Employe>
      */
@@ -135,6 +143,6 @@ class Entreprise
     }
 
     public function __toString() {
-        return $this->raisonSociale." (" . $this->cp . " " . $this->ville . ")";
+        return $this->raisonSociale;
     }
 }
